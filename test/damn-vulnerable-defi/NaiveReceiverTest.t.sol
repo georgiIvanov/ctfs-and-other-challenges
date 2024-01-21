@@ -5,6 +5,7 @@ import "@test/BaseTest.sol";
 import "@solmate/src/tokens/ERC20.sol";
 import "@src/damn-vulnerable-defi/naive-receiver/NaiveReceiverLenderPool.sol";
 import "@src/damn-vulnerable-defi/naive-receiver/FlashLoanReceiver.sol";
+import "@src/damn-vulnerable-defi/naive-receiver/LoanReceiverAttacker.sol";
 
 contract NaiveReceiverTest is BaseTest {
   address user = makeAddr("user");
@@ -40,7 +41,13 @@ contract NaiveReceiverTest is BaseTest {
 
   function testDoSFlashLoans() public {
     /** CODE YOUR SOLUTION HERE */
-
+    vm.startPrank(player);
+    LoanReceiverAttacker attackContract = new LoanReceiverAttacker(
+      receiver,
+      IPool(address(pool)),
+      pool.ETH()
+    );
+    attackContract.attackReceiver();
 
     /** SUCCESS CONDITIONS - NO NEED TO CHANGE ANYTHING HERE */
 
