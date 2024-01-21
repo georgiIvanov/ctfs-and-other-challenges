@@ -8,7 +8,7 @@ import "forge-std/console.sol";
 contract BaseTest is Test {
     address deployer = makeAddr("deployer");
     address player = makeAddr("player");
-    uint256 constant DEPLOYER_INITIAL_FUNDS = 1000 ether;
+    uint256 constant DEPLOYER_INITIAL_FUNDS = 10_000 ether;
 
     function setUp() public virtual {
       vm.deal(deployer, DEPLOYER_INITIAL_FUNDS);
