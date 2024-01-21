@@ -34,12 +34,12 @@ contract ReceiverUnstoppable is Owned, IERC3156FlashBorrower {
     }
 
     function executeFlashLoan(uint256 amount) external onlyOwner {
-        address asset = address(pool.asset());
-        pool.flashLoan(
-            this,
-            asset,
-            amount,
-            bytes("")
-        );
+      address asset = address(pool.asset());
+      pool.flashLoan(
+          this,
+          asset,
+          amount,
+          bytes("")
+      );
     }
 }
