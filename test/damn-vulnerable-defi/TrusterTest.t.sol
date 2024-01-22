@@ -4,6 +4,7 @@ pragma solidity ^0.8.0;
 import "@test/BaseTest.sol";
 import "@solmate/src/tokens/ERC20.sol";
 import "@src/damn-vulnerable-defi/truster/TrusterLenderPool.sol";
+import "@src/damn-vulnerable-defi/truster/TrustAttacker.sol";
 import "@src/damn-vulnerable-defi/DamnValuableToken.sol";
 
 contract TrusterTest is BaseTest {
@@ -28,6 +29,9 @@ contract TrusterTest is BaseTest {
 
   function testTruster() public {
     /** CODE YOUR SOLUTION HERE */
+    vm.startPrank(player);
+    TrustAttacker attackContract = new TrustAttacker(address(pool));
+    attackContract.attack(TOKENS_IN_POOL);
 
     /** SUCCESS CONDITIONS - NO NEED TO CHANGE ANYTHING HERE */
 
