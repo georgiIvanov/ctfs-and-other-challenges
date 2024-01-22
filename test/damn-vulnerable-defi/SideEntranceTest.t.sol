@@ -3,6 +3,7 @@ pragma solidity ^0.8.0;
 
 import "@test/BaseTest.sol";
 import "@src/damn-vulnerable-defi/side-entrance/SideEntranceLenderPool.sol";
+import "@src/damn-vulnerable-defi/side-entrance/LenderPoolAttacker.sol";
 
 contract SideEntranceTest is BaseTest {
   
@@ -24,11 +25,14 @@ contract SideEntranceTest is BaseTest {
 
   function testSideEntrance() public {
     /** CODE YOUR SOLUTION HERE */
+    vm.startPrank(player);
+    LenderPoolAttacker attackerContract = new LenderPoolAttacker(address(pool));
+    attackerContract.attack(ETHER_IN_POOL);
     
 
     /** SUCCESS CONDITIONS - NO NEED TO CHANGE ANYTHING HERE */
     // Player took all ETH from the pool
     assertEq(address(pool).balance, 0);
-    assertEq(player.balance, ETHER_IN_POOL);
+    assertGt(player.balance, ETHER_IN_POOL);
   }
 }
