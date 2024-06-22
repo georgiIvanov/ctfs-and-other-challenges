@@ -3,8 +3,8 @@ pragma solidity ^0.8.0;
 
 import "@test/BaseTest.sol";
 import "@solmate/src/tokens/ERC20.sol";
-import "@src/damn-vulnerable-defi/truster/TrusterLenderPool.sol";
-import "@src/damn-vulnerable-defi/truster/TrustAttacker.sol";
+import "@src/damn-vulnerable-defi/03-truster/TrusterLenderPool.sol";
+import "@src/damn-vulnerable-defi/03-truster/TrustAttacker.sol";
 import "@src/damn-vulnerable-defi/DamnValuableToken.sol";
 
 contract TrusterTest is BaseTest {

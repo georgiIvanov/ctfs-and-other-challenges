@@ -2,10 +2,10 @@
 pragma solidity ^0.8.0;
 
 import "@test/BaseTest.sol";
-import "@src/damn-vulnerable-defi/compromised/Exchange.sol";
-import "@src/damn-vulnerable-defi/compromised/TrustfulOracle.sol";
-import "@src/damn-vulnerable-defi/compromised/TrustfulOracleInitializer.sol";
-import "src/damn-vulnerable-defi/DamnValuableNFT.sol";
+import "@src/damn-vulnerable-defi/07-compromised/Exchange.sol";
+import "@src/damn-vulnerable-defi/07-compromised/TrustfulOracle.sol";
+import "@src/damn-vulnerable-defi/07-compromised/TrustfulOracleInitializer.sol";
+import "@src/damn-vulnerable-defi/DamnValuableNFT.sol";
 
 contract CompromisedTest is BaseTest {
   

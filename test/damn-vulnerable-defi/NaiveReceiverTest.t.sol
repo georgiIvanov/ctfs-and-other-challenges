@@ -3,9 +3,9 @@ pragma solidity ^0.8.0;
 
 import "@test/BaseTest.sol";
 import "@solmate/src/tokens/ERC20.sol";
-import "@src/damn-vulnerable-defi/naive-receiver/NaiveReceiverLenderPool.sol";
-import "@src/damn-vulnerable-defi/naive-receiver/FlashLoanReceiver.sol";
-import "@src/damn-vulnerable-defi/naive-receiver/LoanReceiverAttacker.sol";
+import "@src/damn-vulnerable-defi/02-naive-receiver/NaiveReceiverLenderPool.sol";
+import "@src/damn-vulnerable-defi/02-naive-receiver/FlashLoanReceiver.sol";
+import "@src/damn-vulnerable-defi/02-naive-receiver/LoanReceiverAttacker.sol";
 
 contract NaiveReceiverTest is BaseTest {
   address user = makeAddr("user");

@@ -3,8 +3,8 @@ pragma solidity ^0.8.0;
 
 import "@test/BaseTest.sol";
 import "@solmate/src/tokens/ERC20.sol";
-import "@src/damn-vulnerable-defi/unstoppable/ReceiverUnstoppable.sol";
-import "@src/damn-vulnerable-defi/unstoppable/UnstoppableVault.sol";
+import "@src/damn-vulnerable-defi/01-unstoppable/ReceiverUnstoppable.sol";
+import "@src/damn-vulnerable-defi/01-unstoppable/UnstoppableVault.sol";
 import "@src/damn-vulnerable-defi/DamnValuableToken.sol";
 
 contract UnstoppableTest is BaseTest {

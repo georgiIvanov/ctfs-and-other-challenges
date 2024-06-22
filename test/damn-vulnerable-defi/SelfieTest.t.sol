@@ -2,10 +2,10 @@
 pragma solidity ^0.8.0;
 
 import "@test/BaseTest.sol";
-import "@src/damn-vulnerable-defi/selfie/SelfiePool.sol";
-import "@src/damn-vulnerable-defi/selfie/SimpleGovernance.sol";
-import "@src/damn-vulnerable-defi/selfie/SelfiePoolAttacker.sol";
-import "src/damn-vulnerable-defi/DamnValuableTokenSnapshot.sol";
+import "@src/damn-vulnerable-defi/06-selfie/SelfiePool.sol";
+import "@src/damn-vulnerable-defi/06-selfie/SimpleGovernance.sol";
+import "@src/damn-vulnerable-defi/06-selfie/SelfiePoolAttacker.sol";
+import "@src/damn-vulnerable-defi/DamnValuableTokenSnapshot.sol";
 
 contract SelfieTest is BaseTest {
   

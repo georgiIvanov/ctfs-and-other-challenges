@@ -2,10 +2,10 @@
 pragma solidity ^0.8.0;
 
 import "@test/BaseTest.sol";
-import "@src/damn-vulnerable-defi/the-rewarder/FlashLoanerPool.sol";
-import "@src/damn-vulnerable-defi/the-rewarder/TheRewarderPool.sol";
-import "@src/damn-vulnerable-defi/the-rewarder/RewarderAttacker.sol";
-import "src/damn-vulnerable-defi/DamnValuableToken.sol";
+import "@src/damn-vulnerable-defi/05-the-rewarder/FlashLoanerPool.sol";
+import "@src/damn-vulnerable-defi/05-the-rewarder/TheRewarderPool.sol";
+import "@src/damn-vulnerable-defi/05-the-rewarder/RewarderAttacker.sol";
+import "@src/damn-vulnerable-defi/DamnValuableToken.sol";
 
 contract TheRewarderTest is BaseTest {
   

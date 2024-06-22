@@ -2,8 +2,8 @@
 pragma solidity ^0.8.0;
 
 import "@test/BaseTest.sol";
-import "@src/damn-vulnerable-defi/side-entrance/SideEntranceLenderPool.sol";
-import "@src/damn-vulnerable-defi/side-entrance/LenderPoolAttacker.sol";
+import "@src/damn-vulnerable-defi/04-side-entrance/SideEntranceLenderPool.sol";
+import "@src/damn-vulnerable-defi/04-side-entrance/LenderPoolAttacker.sol";
 
 contract SideEntranceTest is BaseTest {
   
