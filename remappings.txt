@@ -5,3 +5,4 @@ forge-std/=lib/forge-std/src/
 @solady/=lib/solady/
 @src/=src/
 @test/=test/
+@solc-log/=lib/solc-log/src/
