@@ -79,7 +79,7 @@ contract PuppetTest is BaseTest {
   }
 
 
-  function testPuppet() public {
+  function testPuppetV1() public {
     /** CODE YOUR SOLUTION HERE */
     vm.startPrank(player);
     uint256 tokenBalance = _token.balanceOf(player);
